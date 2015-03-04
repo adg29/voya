@@ -31,7 +31,6 @@ $.noConflict();
     var dotR = 3;
     var dotGap = 8;
 
-
     vData.questions.forEach(function (q, i) {
         qList.insertAdjacentHTML('beforeend', '<li>' + (i + 1) + '</li>');
     });
@@ -71,19 +70,42 @@ $.noConflict();
 
             var svg = li.querySelector('svg');
 
+            var groups = {
+                "Blind & Behind": [],
+                "Challenged": [],
+                "Auto-Pilot": [],
+                "Ready & Able": []
+            };
+
             for (var j = 0; j < choice.t; j++) {
                 var theta = 2.39998131 * j;
                 var radius = 2.5 * Math.sqrt(theta);
+                var startRad = 5 * Math.sqrt(theta);
                 var x = Math.cos(theta) * radius;
                 var y = Math.sin(theta) * radius;
+                var startX = Math.cos(theta) * startRad;
+                var startY = Math.sin(theta) * startRad;
                 var circle = document.createElementNS(ns, 'circle');
                 var fill = legend['Ready & Able'].color;
                 if (choice.a[0][0] + choice.a[1][0] + choice.a[2][0] > j) fill = legend['Auto-Pilot'].color;
                 if (choice.a[0][0] + choice.a[1][0] > j) fill = legend.Challenged.color;
                 if (choice.a[0][0] > j) fill = legend['Blind & Behind'].color;
-                setAttrs(circle, {cx: x, cy: y, r: dotR, fill: fill});
+                setAttrs(circle, {
+                    /*cx: x, cy: y, */
+                    style: 'transform: translate(' + startX + 'px, ' + startY + 'px)',
+                    r: dotR,
+                    fill: fill
+                });
+                circle.endX = x;
+                circle.endY = y;
                 svg.appendChild(circle);
             }
+
+            setTimeout(function () {
+                svg.getElementsByTagName('circle').forEach(function (circle) {
+                    circle.setAttribute('style', 'transform: translate(' + circle.endX + 'px, ' + circle.endY + 'px)');
+                });
+            }, 0);
 
             retireesQ.appendChild(li);
         });
@@ -111,7 +133,12 @@ $.noConflict();
                 if (choice.a[0][0] + choice.a[1][0] + choice.a[2][0] > j) fill = legend['Auto-Pilot'].color;
                 if (choice.a[0][0] + choice.a[1][0] > j) fill = legend.Challenged.color;
                 if (choice.a[0][0] > j) fill = legend['Blind & Behind'].color;
-                setAttrs(circle, {cx: x, cy: y, r: dotR, fill: fill});
+                setAttrs(circle, {cx: x, cy: y, r: dotR, fill: 'rgba(0, 0, 0, 0)'});
+
+                setTimeout(function (fill, circle) {
+                    circle.setAttribute('fill', fill);
+                }, j * 5, fill, circle);
+
                 svg.appendChild(circle);
             }
 

@@ -52,7 +52,7 @@ article {
 
 .qualifiers > li {
     list-style: none;
-    background: #800;
+    background: rgba(255, 255, 255, .3);
     color: white;
     font-size: 12px;
     cursor: pointer;
@@ -60,11 +60,11 @@ article {
 }
 
 .qualifiers > li:nth-child(odd) {
-    background: #600;
+    background: rgba(255, 255, 255, .1);
 }
 
 .qualifiers > li:hover {
-    background: #090;
+    background: rgba(0, 255, 0, .1);
 }
 
 .subgroup {
@@ -107,4 +107,8 @@ article {
 #legend li {
     list-style: none;
     padding: 5px;
+}
+
+circle {
+    transition: transform .3s, fill .3s;
 }
