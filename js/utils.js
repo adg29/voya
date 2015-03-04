@@ -443,6 +443,10 @@ function rad2deg(rad) {
     return 180 / Math.PI * rad;
 }
 
+function deg2rad(deg) {
+    return Math.PI / 180 * deg;
+}
+
 function setAttrs(el, attrs) {
     Object.keys(attrs).forEach(function (key) {
         el.setAttribute(key, attrs[key]);

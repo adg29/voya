@@ -1,6 +1,7 @@
 $.noConflict();
 (function () {
     var qList = byId('questions');
+    var $legend = byId('legend');
     var workerChart = $('.workers .chart');
     var retireeChart = $('.retirees .chart');
 
@@ -23,13 +24,8 @@ $.noConflict();
         }
     };
 
-    for (var key in legend) {
-        workerChart.querySelector('.' + legend[key].className).setAttribute('fill', legend[key].color);
-        retireeChart.querySelector('.' + legend[key].className).setAttribute('fill', legend[key].color);
-    }
-
-    document.getElementsByTagName('circle').forEach(function (c) {
-        setAttrs(c, {r: 3, cx: 20, cy: 125, 'fill-opacity': 0.5});
+    Object.keys(legend).forEach(function (key) {
+        $legend.insertAdjacentHTML('beforeend', '<li style="background-color: ' + legend[key].color + '">' + key + '</li>');
     });
 
     var dotR = 3;
@@ -65,19 +61,63 @@ $.noConflict();
         vData.questions[position].rchoices.forEach(function (choice) {
             var li = document.createElement('li');
             li.textContent = choice.l;
-            // li.insertAdjacentHTML('beforeend', '<li>' + choice.l + '</li>');
-            retireesQ.appendChild(li);
 
             var ul = choice.a.reduce(function (m, r, i) {
-                return m + '<li class="subgroup-item" style="width: ' + r[1] + '%; background-color: ' + legend[r[2]].color + '"></li>';
+                return m + '<li class="subgroup-item" style="width: ' + (r[0] / choice.t * 100) + '%; background-color: ' + legend[r[2]].color + '"></li>';
             }, '<ul class="subgroup">') + '</ul>';
 
             li.insertAdjacentHTML('beforeend', ul);
+            li.insertAdjacentHTML('afterbegin', '<svg width="200" height="200" viewBox="-100 -100 200 200"></svg>');
+
+            var svg = li.querySelector('svg');
+
+            for (var j = 0; j < choice.t; j++) {
+                var theta = 2.39998131 * j;
+                var radius = 2.5 * Math.sqrt(theta);
+                var x = Math.cos(theta) * radius;
+                var y = Math.sin(theta) * radius;
+                var circle = document.createElementNS(ns, 'circle');
+                var fill = legend['Ready & Able'].color;
+                if (choice.a[0][0] + choice.a[1][0] + choice.a[2][0] > j) fill = legend['Auto-Pilot'].color;
+                if (choice.a[0][0] + choice.a[1][0] > j) fill = legend.Challenged.color;
+                if (choice.a[0][0] > j) fill = legend['Blind & Behind'].color;
+                setAttrs(circle, {cx: x, cy: y, r: dotR, fill: fill});
+                svg.appendChild(circle);
+            }
+
+            retireesQ.appendChild(li);
         });
 
         vData.questions[position].wchoices.forEach(function (choice) {
-            workerQ.insertAdjacentHTML('beforeend', '<li>' + choice.l + '</li>');
+            var li = document.createElement('li');
+            li.textContent = choice.l;
+
+            var ul = choice.a.reduce(function (m, w, i) {
+                return m + '<li class="subgroup-item" style="width: ' + (w[0] / choice.t * 100) + '%; background-color: ' + legend[w[2]].color + '"></li>';
+            }, '<ul class="subgroup">') + '</ul>';
+
+            li.insertAdjacentHTML('beforeend', ul);
+            li.insertAdjacentHTML('afterbegin', '<svg width="200" height="200" viewBox="-100 -100 200 200"></svg>');
+
+            var svg = li.querySelector('svg');
+
+            for (var j = 0; j < choice.t; j++) {
+                var theta = 2.39998131 * j;
+                var radius = 2.5 * Math.sqrt(theta);
+                var x = Math.cos(theta) * radius;
+                var y = Math.sin(theta) * radius;
+                var circle = document.createElementNS(ns, 'circle');
+                var fill = legend['Ready & Able'].color;
+                if (choice.a[0][0] + choice.a[1][0] + choice.a[2][0] > j) fill = legend['Auto-Pilot'].color;
+                if (choice.a[0][0] + choice.a[1][0] > j) fill = legend.Challenged.color;
+                if (choice.a[0][0] > j) fill = legend['Blind & Behind'].color;
+                setAttrs(circle, {cx: x, cy: y, r: dotR, fill: fill});
+                svg.appendChild(circle);
+            }
+
+            workerQ.appendChild(li);
         });
+
     });
 
     // select from subgroups
