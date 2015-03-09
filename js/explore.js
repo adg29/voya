@@ -58,6 +58,8 @@ $.noConflict();
         // qualifiers.dataset.current = position;
 
         vData.questions[position].rchoices.forEach(function (choice) {
+            console.log('retirees choice', choice);
+
             var li = document.createElement('li');
             li.textContent = choice.l;
 
