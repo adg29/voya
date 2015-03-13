@@ -5,6 +5,7 @@ $.noConflict();
     var workerChart = $('.workers .chart');
     var retireeChart = $('.retirees .chart');
     var currentAnswers = $('.current-answers section');
+    var currentAnswerItems = $all('.current-answers section .answer-item a');
 
     var legend = {
         "Frozen": {
@@ -30,7 +31,7 @@ $.noConflict();
     };
 
     Object.keys(legend).forEach(function (key) {
-        $legend.insertAdjacentHTML('beforeend', '<li><span class="dot" style="background: ' + legend[key].color + '"></span> <span class="key">' + key + '</span></li>');
+        $legend.insertAdjacentHTML('afterbegin', '<li><span class="dot" style="background: ' + legend[key].color + '"></span> <span class="key">' + key + '</span></li>');
     });
 
     var dotR = 3;
@@ -77,12 +78,19 @@ $.noConflict();
             currentAnswers.appendChild(ul_answers);
 
             var li = document.createElement('li');
-            li.classList.add('answer-'+sanitizeClass(vData.questions[position].wq+'-'+ci));
-            li.textContent = choice.l;
+            li.classList.add(sanitizeClass(vData.questions[position].wq+'-'+ci));
+            // li.textContent = choice.l;
 
-            var ul = choice.a.reduce(function (m, r, i) {
-                return m + '<li class="subgroup-item" style="width: ' + (r[0] / choice.t * 100) + '%; background-color: ' + legend[r[2]].color + '"></li>';
-            }, '<ul class="subgroup">') + '</ul>';
+            var ul = '<ul class="subgroup">';
+            Object.keys(legend).reverse().forEach(function (l) {
+                var r = choice.a.filter(function(a){
+                    return l==a[2];
+                });
+                if(r.length>0){
+                    ul += '<li class="subgroup-item" style="width: ' + (r[0][0] / choice.t * 100) + '%; background-color: ' + legend[r[0][2]].color + '"></li>';
+                }
+            });
+            ul += '</ul>';
 
             li.insertAdjacentHTML('beforeend', ul);
             li.insertAdjacentHTML('afterbegin', '<svg width="400" height="400" viewBox="-200 -200 400 400"></svg>');
@@ -138,11 +146,11 @@ $.noConflict();
                 var answerChoice = answerAnchor.dataset.choice;
                 console.log(answerChoice);
 
-                $all('.qualifiers > li.active').forEach(function(c){
+                $all('.qualifiers > li.active, .answer-item.active').forEach(function(c){
                     c.classList.remove('active');
                 });
 
-                $all('.answer-'+answerChoice).forEach(function(c){
+                $all('.'+answerChoice).forEach(function(c){
                     c.classList.add('active');
                 });
             });
@@ -151,12 +159,19 @@ $.noConflict();
         //Worker choices
         vData.questions[position].wchoices.forEach(function (choice,ci) {
             var li = document.createElement('li');
-            li.classList.add('answer-'+sanitizeClass(vData.questions[position].wq+'-'+ci));
-            li.textContent = choice.l;
+            li.classList.add(sanitizeClass(vData.questions[position].wq+'-'+ci));
+            // li.textContent = choice.l;
 
-            var ul = choice.a.reduce(function (m, w, i) {
-                return m + '<li class="subgroup-item" style="width: ' + (w[0] / choice.t * 100) + '%; background-color: ' + legend[w[2]].color + '"></li>';
-            }, '<ul class="subgroup">') + '</ul>';
+            var ul = '<ul class="subgroup">';
+            Object.keys(legend).reverse().forEach(function (l) {
+                var w = choice.a.filter(function(a){
+                    return l==a[2];
+                });
+                if(w.length>0){
+                    ul += '<li class="subgroup-item" style="width: ' + (w[0][0] / choice.t * 100) + '%; background-color: ' + legend[w[0][2]].color + '"></li>';
+                }
+            });
+            ul += '</ul>';
 
             li.insertAdjacentHTML('beforeend', ul);
             li.insertAdjacentHTML('afterbegin', '<svg width="400" height="400" viewBox="-200 -200 400 400"></svg>');
@@ -184,6 +199,9 @@ $.noConflict();
 
             workerQ.appendChild(li);
         });
+
+        currentAnswerItems = $all('.current-answers section .answer-item a');
+        currentAnswerItems[0].click();
 
     });
 
@@ -230,7 +248,7 @@ $.noConflict();
     qList.childNodes[6].classList.add('active');
     qList.childNodes[6].click();
 
-    var currentAnswerItems = $all('.current-answers section .answer-item a');
+    currentAnswerItems = $all('.current-answers section .answer-item a');
     currentAnswerItems[0].click();
 
 })();
