@@ -6,6 +6,10 @@ $.noConflict();
     var retireeChart = $('.retirees .chart');
 
     var legend = {
+        "Frozen": {
+            className: 'frozen',
+            color: '#0097A9'
+        },
         "Blind & Behind": {
             className: 'blind',
             color: '#145A7B'
@@ -32,7 +36,7 @@ $.noConflict();
     var dotGap = 8;
 
     vData.questions.forEach(function (q, i) {
-        qList.insertAdjacentHTML('beforeend', '<li>' + (i + 1) + '</li>');
+        qList.insertAdjacentHTML('beforeend', '<li></li>');
     });
 
     // select from one of 9 questions
@@ -69,7 +73,7 @@ $.noConflict();
             }, '<ul class="subgroup">') + '</ul>';
 
             li.insertAdjacentHTML('beforeend', ul);
-            li.insertAdjacentHTML('afterbegin', '<svg width="200" height="200" viewBox="-100 -100 200 200"></svg>');
+            li.insertAdjacentHTML('afterbegin', '<svg width="400" height="400" viewBox="-200 -200 400 400"></svg>');
 
             var svg = li.querySelector('svg');
 
@@ -123,7 +127,7 @@ $.noConflict();
             }, '<ul class="subgroup">') + '</ul>';
 
             li.insertAdjacentHTML('beforeend', ul);
-            li.insertAdjacentHTML('afterbegin', '<svg width="200" height="200" viewBox="-100 -100 200 200"></svg>');
+            li.insertAdjacentHTML('afterbegin', '<svg width="400" height="400" viewBox="-200 -200 400 400"></svg>');
 
             var svg = li.querySelector('svg');
 
