@@ -4,6 +4,7 @@ $.noConflict();
     var $legend = byId('legend');
     var workerChart = $('.workers .chart');
     var retireeChart = $('.retirees .chart');
+    var currentAnswers = $('.current-answers section');
 
     var legend = {
         "Frozen": {
@@ -56,16 +57,27 @@ $.noConflict();
 
         while (workerQ.lastChild) { workerQ.removeChild(workerQ.lastChild); }
         while (retireesQ.lastChild) { retireesQ.removeChild(retireesQ.lastChild); }
+        while (currentAnswers.lastChild) { currentAnswers.removeChild(currentAnswers.lastChild); }
 
 
         // console.log(vData.questions);
         // qualifiers.dataset.current = position;
 
+        var ul_answers = document.createElement('ul');
+        ul_answers.classList.add('answers');
+        var ul_answer_items = "";
+
         //Retired choices
-        vData.questions[position].rchoices.forEach(function (choice) {
+        vData.questions[position].rchoices.forEach(function (choice,ci) {
             console.log('retirees choice', choice);
 
+            ul_answer_items += '<li class="answer-item '+sanitizeClass(vData.questions[position].wq+'-'+ci)+'"><a data-choice="'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'" href="#'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'">'+choice.l+'</a></li>';
+
+
+            currentAnswers.appendChild(ul_answers);
+
             var li = document.createElement('li');
+            li.classList.add('answer-'+sanitizeClass(vData.questions[position].wq+'-'+ci));
             li.textContent = choice.l;
 
             var ul = choice.a.reduce(function (m, r, i) {
@@ -117,9 +129,29 @@ $.noConflict();
             retireesQ.appendChild(li);
         });
 
+        ul_answers.insertAdjacentHTML('beforeend',ul_answer_items);
+
+        var answer_menu = document.querySelectorAll('.answer-item a');
+        answer_menu.forEach(function(a){
+            a.addEventListener('click',function(e){
+                var answerAnchor = e.currentTarget;
+                var answerChoice = answerAnchor.dataset.choice;
+                console.log(answerChoice);
+
+                $all('.qualifiers > li.active').forEach(function(c){
+                    c.classList.remove('active');
+                });
+
+                $all('.answer-'+answerChoice).forEach(function(c){
+                    c.classList.add('active');
+                });
+            });
+        });
+
         //Worker choices
-        vData.questions[position].wchoices.forEach(function (choice) {
+        vData.questions[position].wchoices.forEach(function (choice,ci) {
             var li = document.createElement('li');
+            li.classList.add('answer-'+sanitizeClass(vData.questions[position].wq+'-'+ci));
             li.textContent = choice.l;
 
             var ul = choice.a.reduce(function (m, w, i) {
