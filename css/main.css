@@ -94,7 +94,7 @@ h2 {
 
 .subgroup-item {
     display: inline-block;
-    height: 2px;
+    height: 25px;
 }
 
 .content .column{
@@ -115,6 +115,12 @@ h2 {
     list-style-type: none;
     padding: 10px;
     background: #fff;
+    margin-top: 5px;
+}
+.answers .active.answer-item{
+    list-style-type: none;
+    padding: 10px;
+    background: #ccc;
     margin-top: 5px;
 }
 
