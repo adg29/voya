@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background: #333;
+    background: #F5F5F5;
     font-family: sans-serif;
 }
 
@@ -10,7 +10,19 @@ div, p, article, li, ul, h1, h2, h3, h4, h5, h6, table {
     box-sizing: border-box;
 }
 
-h2 { color: white; margin: 0; }
+h2 { 
+    color: black; 
+    margin: 0; 
+    font-weight: bold;
+}
+
+.current-question {
+    box-sizing: border-box;
+    padding: 10px;
+    color: #000;
+    width: 90%;
+}
+
 
 #questions {
     padding: 0;
@@ -53,7 +65,7 @@ article {
 .qualifiers > li {
     list-style: none;
     background: rgba(255, 255, 255, .3);
-    color: white;
+    color: black;
     font-size: 12px;
     cursor: pointer;
     overflow: hidden;
@@ -88,25 +100,27 @@ article {
     margin-right: 1%;
 }
 
-.current-question {
-    box-sizing: border-box;
-    padding: 10px;
-    background: #880;
-    color: white;
-    width: 49.5%;
-    margin-right: 1%;
-    float: left;
-}
-
 #legend {
     width: 49.5%;
     float: left;
     padding: 0;
 }
 
+#legend .dot{
+    border-radius: 50px;
+    font-size: 20px;
+    color: #fff;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    display: block;
+}
+
 #legend li {
     list-style: none;
     padding: 5px;
+    color: black;
 }
 
 circle {

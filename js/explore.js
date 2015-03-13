@@ -8,24 +8,24 @@ $.noConflict();
     var legend = {
         "Blind & Behind": {
             className: 'blind',
-            color: '#f90'
+            color: '#145A7B'
         },
         "Challenged": {
             className: 'challenged',
-            color: '#ff0'
+            color: '#551B57'
         },
         "Auto-Pilot": {
             className: 'auto-pilot',
-            color: '#66f'
+            color: '#B73F7C'
         },
         "Ready & Able": {
             className: 'ready',
-            color: '#0c0'
+            color: '#76C5E4'
         }
     };
 
     Object.keys(legend).forEach(function (key) {
-        $legend.insertAdjacentHTML('beforeend', '<li style="background-color: ' + legend[key].color + '">' + key + '</li>');
+        $legend.insertAdjacentHTML('beforeend', '<li><span class="dot" style="background: ' + legend[key].color + '"></span> <span class="key">' + key + '</span></li>');
     });
 
     var dotR = 3;
