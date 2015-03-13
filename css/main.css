@@ -73,6 +73,10 @@ h2 {
     font-size: 12px;
     cursor: pointer;
     overflow: hidden;
+    display: none;
+}
+.qualifiers > li.active {
+    display: block;
 }
 
 .qualifiers > li:nth-child(odd) {
@@ -93,7 +97,28 @@ h2 {
     height: 2px;
 }
 
-.column {
+.content .column{
+    padding: 20px;
+    display: inline-block;
+    background: rgba(255, 255, 255, .1);
+    vertical-align: top;
+}
+
+.content .current-answers.column {
+    width: 25%;
+}
+.content .charts.column {
+    width: 70%;
+}
+
+.answers .answer-item{
+    list-style-type: none;
+    padding: 10px;
+    background: #fff;
+    margin-top: 5px;
+}
+
+.charts .column {
     padding: 20px;
     display: inline-block;
     width: 49.5%;
@@ -101,7 +126,6 @@ h2 {
 }
 
 #legend {
-    width: 49.5%;
     padding: 0;
 }
 
@@ -120,6 +144,8 @@ h2 {
     list-style: none;
     padding: 5px;
     color: black;
+    display: inline-block;
+    width: 20%;
 }
 
 circle {

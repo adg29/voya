@@ -453,6 +453,10 @@ function setAttrs(el, attrs) {
     });
 }
 
+function sanitizeClass(str){
+  return str.toLowerCase().replace(/ /g,'-');
+}
+
 var HALF_PI = Math.PI / 2;
 var TAU = Math.PI * 2;
 var ns = "http://www.w3.org/2000/svg";
@@ -461,3 +465,12 @@ window.$ = document.querySelector.bind(document);
 window.$all = document.querySelectorAll.bind(document);
 window.byClass = document.getElementsByTagName.bind(document);
 window.byId = document.getElementById.bind(document);
+
+
+
+
+
+
+
+
+
