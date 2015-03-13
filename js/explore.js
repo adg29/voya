@@ -230,4 +230,7 @@ $.noConflict();
     qList.childNodes[6].classList.add('active');
     qList.childNodes[6].click();
 
+    var currentAnswerItems = $all('.current-answers section .answer-item a');
+    currentAnswerItems[0].click();
+
 })();
