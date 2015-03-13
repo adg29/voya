@@ -57,6 +57,7 @@ $.noConflict();
         // console.log(vData.questions);
         // qualifiers.dataset.current = position;
 
+        //Retired choices
         vData.questions[position].rchoices.forEach(function (choice) {
             console.log('retirees choice', choice);
 
@@ -112,6 +113,7 @@ $.noConflict();
             retireesQ.appendChild(li);
         });
 
+        //Worker choices
         vData.questions[position].wchoices.forEach(function (choice) {
             var li = document.createElement('li');
             li.textContent = choice.l;
