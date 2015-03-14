@@ -83,11 +83,12 @@ $.noConflict();
 
             var ul = '<ul class="subgroup">';
             Object.keys(legend).reverse().forEach(function (l) {
+                var choiceTotal = choice.a.reduce(function(t,p,i){ return t+= p[0];},0);
                 var r = choice.a.filter(function(a){
                     return l==a[2];
                 });
                 if(r.length>0){
-                    ul += '<li class="subgroup-item" style="width: ' + (r[0][0] / choice.t * 100) + '%; background-color: ' + legend[r[0][2]].color + '"></li>';
+                    ul += '<li class="subgroup-item" style="width: ' + (r[0][0] / choiceTotal * 100) + '%; background-color: ' + legend[r[0][2]].color + '"></li>';
                 }
             });
             ul += '</ul>';
@@ -164,11 +165,12 @@ $.noConflict();
 
             var ul = '<ul class="subgroup">';
             Object.keys(legend).reverse().forEach(function (l) {
+                var choiceTotal = choice.a.reduce(function(t,p,i){ return t+= p[0];},0);
                 var w = choice.a.filter(function(a){
                     return l==a[2];
                 });
                 if(w.length>0){
-                    ul += '<li class="subgroup-item" style="width: ' + (w[0][0] / choice.t * 100) + '%; background-color: ' + legend[w[0][2]].color + '"></li>';
+                    ul += '<li class="subgroup-item" style="width: ' + (w[0][0] / choiceTotal * 100) + '%; background-color: ' + legend[w[0][2]].color + '"></li>';
                 }
             });
             ul += '</ul>';
@@ -245,8 +247,8 @@ $.noConflict();
     // });
 
     // make there be something to look when page loads
-    qList.childNodes[6].classList.add('active');
-    qList.childNodes[6].click();
+    qList.childNodes[0].classList.add('active');
+    qList.childNodes[0].click();
 
     currentAnswerItems = $all('.current-answers section .answer-item a');
     currentAnswerItems[0].click();
