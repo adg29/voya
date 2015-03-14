@@ -10,28 +10,33 @@ $.noConflict();
     var legend = {
         "Frozen": {
             className: 'frozen',
-            color: '#0097A9'
+            color: '#0097A9',
+            desc: 'Describe frozen ....'
         },
         "Behind": {
             className: 'blind',
-            color: '#145A7B'
+            color: '#145A7B',
+            desc: 'Describe behind ....'
         },
         "Aware": {
             className: 'challenged',
-            color: '#551B57'
+            color: '#551B57',
+            desc: 'Describe aware ....'
         },
         "Stable": {
             className: 'auto-pilot',
-            color: '#B73F7C'
+            color: '#B73F7C',
+            desc: 'Describe stable ....'
         },
         "Prepared": {
             className: 'ready',
-            color: '#76C5E4'
+            color: '#76C5E4',
+            desc: 'Describe prepared ....'
         }
     };
 
     Object.keys(legend).forEach(function (key) {
-        $legend.insertAdjacentHTML('afterbegin', '<li><span class="dot" style="background: ' + legend[key].color + '"></span> <span class="key">' + key + '</span></li>');
+        $legend.insertAdjacentHTML('afterbegin', '<li data-tooltip="'+legend[key].desc+'"><span class="dot" style="background: ' + legend[key].color + '"></span> <span class="key">' + key + '</span></li>');
     });
 
     var dotR = 3;
@@ -88,7 +93,7 @@ $.noConflict();
                     return l==a[2];
                 });
                 if(r.length>0){
-                    ul += '<li class="subgroup-item" style="width: ' + (r[0][0] / choiceTotal * 100) + '%; background-color: ' + legend[r[0][2]].color + '"></li>';
+                    ul += '<li class="subgroup-item" data-tooltip="'+ (r[0][0] / choiceTotal * 100).toFixed(1) +'% '+ r[0][2] +'" style="width: ' + (r[0][0] / choiceTotal * 100) + '%; background-color: ' + legend[r[0][2]].color + '"></li>';
                 }
             });
             ul += '</ul>';
@@ -115,14 +120,24 @@ $.noConflict();
                 var startY = Math.sin(theta) * startRad;
                 var circle = document.createElementNS(ns, 'circle');
                 var fill = legend['Prepared'].color;
-                if (choice.a[0][0] + choice.a[1][0] + choice.a[2][0] > j) fill = legend['Stable'].color;
-                if (choice.a[0][0] + choice.a[1][0] > j) fill = legend['Aware'].color;
-                if (choice.a[0][0] > j) fill = legend['Behind'].color;
+                if (choice.a[0][0] + choice.a[1][0] + choice.a[2][0] > j){
+                    fill = legend['Stable'].color;
+                    circle.dataset.tooltip = ' Stable';
+                } 
+                if (choice.a[0][0] + choice.a[1][0] > j){
+                    fill = legend['Aware'].color;
+                    circle.dataset.tooltip = ' Aware';
+                } 
+                if (choice.a[0][0] > j) {
+                    fill = legend['Behind'].color;
+                    circle.dataset.tooltip = ' Behind';
+                }
                 setAttrs(circle, {
                     /*cx: x, cy: y, */
                     style: 'transform: translate(' + startX + 'px, ' + startY + 'px)',
                     r: dotR,
-                    fill: fill
+                    fill: fill,
+                    "data-tooltip": circle.dataset.tooltip
                 });
                 circle.endX = x;
                 circle.endY = y;
@@ -170,7 +185,7 @@ $.noConflict();
                     return l==a[2];
                 });
                 if(w.length>0){
-                    ul += '<li class="subgroup-item" style="width: ' + (w[0][0] / choiceTotal * 100) + '%; background-color: ' + legend[w[0][2]].color + '"></li>';
+                    ul += '<li class="subgroup-item" data-tooltip="'+ (w[0][0] / choiceTotal * 100).toFixed(1) +'% '+ w[0][2] +'" style="width: ' + (w[0][0] / choiceTotal * 100) + '%; background-color: ' + legend[w[0][2]].color + '"></li>';
                 }
             });
             ul += '</ul>';
