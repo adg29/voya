@@ -1,4 +1,3 @@
-$.noConflict();
 (function () {
     var qList = byId('questions');
     var $legend = byId('legend');
@@ -10,27 +9,27 @@ $.noConflict();
     var legend = {
         "Frozen": {
             className: 'frozen',
-            color: '#0097A9',
+            color: '#6E6E6E',
             desc: 'Describe frozen ....'
         },
         "Behind": {
             className: 'blind',
-            color: '#145A7B',
+            color: '#B7357C',
             desc: 'Describe behind ....'
         },
         "Aware": {
             className: 'challenged',
-            color: '#551B57',
+            color: '#FFC700',
             desc: 'Describe aware ....'
         },
         "Stable": {
             className: 'auto-pilot',
-            color: '#B73F7C',
+            color: '#76C5E4',
             desc: 'Describe stable ....'
         },
         "Prepared": {
             className: 'ready',
-            color: '#76C5E4',
+            color: '#9AC1A6',
             desc: 'Describe prepared ....'
         }
     };
@@ -86,14 +85,17 @@ $.noConflict();
             li.classList.add(sanitizeClass(vData.questions[position].wq+'-'+ci));
             // li.textContent = choice.l;
 
+            var choiceTotal = choice.a.reduce(function(t,p,i){ return t + p[0];},0);
+
             var ul = '<ul class="subgroup">';
-            Object.keys(legend).reverse().forEach(function (l) {
-                var choiceTotal = choice.a.reduce(function(t,p,i){ return t+= p[0];},0);
+            Object.keys(legend).reverse().forEach(function (l, i) {
+
                 var r = choice.a.filter(function(a){
                     return l==a[2];
                 });
                 if(r.length>0){
-                    ul += '<li class="subgroup-item" data-tooltip="'+ (r[0][0] / choiceTotal * 100).toFixed(1) +'% '+ r[0][2] +'" style="width: ' + (r[0][0] / choiceTotal * 100) + '%; background-color: ' + legend[r[0][2]].color + '"></li>';
+                    var percent = (r[0][0] / choiceTotal * 100).toFixed(1);
+                    ul += '<li class="subgroup-item" data-tooltip="'+ percent +'% '+ r[0][2] +'" style="width: ' + percent + '%; background-color: ' + legend[r[0][2]].color + '">' + percent + '%</li>';
                 }
             });
             ul += '</ul>';
@@ -110,39 +112,31 @@ $.noConflict();
                 "Prepared": []
             };
 
-            for (var j = 0; j < choice.t; j++) {
-                var theta = 2.39998131 * j;
-                var radius = 2.5 * Math.sqrt(theta);
-                var startRad = 5 * Math.sqrt(theta);
-                var x = Math.cos(theta) * radius;
-                var y = Math.sin(theta) * radius;
-                var startX = Math.cos(theta) * startRad;
-                var startY = Math.sin(theta) * startRad;
-                var circle = document.createElementNS(ns, 'circle');
-                var fill = legend['Prepared'].color;
-                if (choice.a[0][0] + choice.a[1][0] + choice.a[2][0] > j){
-                    fill = legend['Stable'].color;
-                    circle.dataset.tooltip = ' Stable';
-                } 
-                if (choice.a[0][0] + choice.a[1][0] > j){
-                    fill = legend['Aware'].color;
-                    circle.dataset.tooltip = ' Aware';
-                } 
-                if (choice.a[0][0] > j) {
-                    fill = legend['Behind'].color;
-                    circle.dataset.tooltip = ' Behind';
+            var n = 0;
+
+            choice.a.forEach(function (answer) {
+                for (var j = 0; j < answer[0]; j++, n++) {
+                    var theta = 2.39998131 * n;
+                    var radius = 2.5 * Math.sqrt(theta);
+                    var startRad = 5 * Math.sqrt(theta);
+                    var x = Math.cos(theta) * startRad;
+                    var y = Math.sin(theta) * startRad;
+                    var endX = Math.cos(theta) * radius;
+                    var endY = Math.sin(theta) * radius;
+
+                    var circle = document.createElementNS(ns, 'circle');
+                    setAttrs(circle, {
+                        fill: legend[answer[2]].color,
+                        r: dotR,
+                        style: 'transform: translate(' + x + 'px, ' + y + 'px)'
+                    });
+                    circle.dataset.tooltip = answer[2];
+                    circle.endX = endX;
+                    circle.endY = endY;
+
+                    svg.appendChild(circle);
                 }
-                setAttrs(circle, {
-                    /*cx: x, cy: y, */
-                    style: 'transform: translate(' + startX + 'px, ' + startY + 'px)',
-                    r: dotR,
-                    fill: fill,
-                    "data-tooltip": circle.dataset.tooltip
-                });
-                circle.endX = x;
-                circle.endY = y;
-                svg.appendChild(circle);
-            }
+            });
 
             setTimeout(function () {
                 svg.getElementsByTagName('circle').forEach(function (circle) {
@@ -177,15 +171,16 @@ $.noConflict();
             var li = document.createElement('li');
             li.classList.add(sanitizeClass(vData.questions[position].wq+'-'+ci));
             // li.textContent = choice.l;
+            var choiceTotal = choice.a.reduce(function(t,p,i){ return t + p[0]; },0);
 
             var ul = '<ul class="subgroup">';
             Object.keys(legend).reverse().forEach(function (l) {
-                var choiceTotal = choice.a.reduce(function(t,p,i){ return t+= p[0];},0);
                 var w = choice.a.filter(function(a){
                     return l==a[2];
                 });
                 if(w.length>0){
-                    ul += '<li class="subgroup-item" data-tooltip="'+ (w[0][0] / choiceTotal * 100).toFixed(1) +'% '+ w[0][2] +'" style="width: ' + (w[0][0] / choiceTotal * 100) + '%; background-color: ' + legend[w[0][2]].color + '"></li>';
+                    var percent = w[0][1];
+                    ul += '<li class="subgroup-item" data-tooltip="'+ percent +'% '+ w[0][2] +'" style="width: ' + percent + '%; background-color: ' + legend[w[0][2]].color + '">' + percent + '%</li>';
                 }
             });
             ul += '</ul>';
@@ -195,24 +190,32 @@ $.noConflict();
 
             var svg = li.querySelector('svg');
 
-            for (var j = 0; j < choice.t; j++) {
-                var theta = 2.39998131 * j;
-                var radius = 2.5 * Math.sqrt(theta);
-                var x = Math.cos(theta) * radius;
-                var y = Math.sin(theta) * radius;
-                var circle = document.createElementNS(ns, 'circle');
-                var fill = legend['Prepared'].color;
-                if (choice.a[0][0] + choice.a[1][0] + choice.a[2][0] > j) fill = legend['Stable'].color;
-                if (choice.a[0][0] + choice.a[1][0] > j) fill = legend['Aware'].color;
-                if (choice.a[0][0] > j) fill = legend['Behind'].color;
-                setAttrs(circle, {cx: x, cy: y, r: dotR, fill: 'rgba(0, 0, 0, 0)'});
+            var n = 0;
 
-                setTimeout(function (fill, circle) {
-                    circle.setAttribute('fill', fill);
-                }, j * 5, fill, circle);
+            choice.a.reverse().forEach(function (answer) {
+                for (var j = 0; j < answer[0]; j++, n++) {
+                    var theta = 2.39998131 * n;
+                    var radius = 2.5 * Math.sqrt(theta);
+                    var x = Math.cos(theta) * radius;
+                    var y = Math.sin(theta) * radius;
 
-                svg.appendChild(circle);
-            }
+                    var fill = legend[answer[2]].color;
+                    var circle = document.createElementNS(ns, 'circle');
+                    setAttrs(circle, {
+                        // fill: legend[answer[2]].color,
+                        fill: 'rgba(0, 0, 0, 0)',
+                        r: dotR,
+                        style: 'transform: translate(' + x + 'px, ' + y + 'px)'
+                    });
+                    circle.dataset.tooltip = answer[2];
+
+                    svg.appendChild(circle);
+
+                    setTimeout(function (fill, circle) {
+                        circle.setAttribute('fill', fill);
+                    }, n * 5, fill, circle);
+                }
+            });
 
             workerQ.appendChild(li);
         });

@@ -17,9 +17,9 @@ div, p, article, li, ul, h1, h2, h3, h4, h5, h6, table {
     box-sizing: border-box;
 }
 
-h2 { 
-    color: black; 
-    margin: 0; 
+h2 {
+    color: black;
+    margin: 0;
     font-weight: bold;
 }
 
@@ -93,8 +93,11 @@ h2 {
 }
 
 .subgroup-item {
-    display: inline-block;
+    display: block;
+    margin-bottom: 4px;
     height: 25px;
+    padding-top: 7px;
+    color: white;
 }
 
 .content .column{
@@ -201,15 +204,15 @@ header,
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
-  -webkit-transition: 
+  -webkit-transition:
       opacity 0.2s ease-in-out,
         visibility 0.2s ease-in-out,
         -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    -moz-transition:    
+    -moz-transition:
         opacity 0.2s ease-in-out,
         visibility 0.2s ease-in-out,
         -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    transition:         
+    transition:
         opacity 0.2s ease-in-out,
         visibility 0.2s ease-in-out,
         transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -300,7 +303,7 @@ header,
 .tooltip-top:focus:after {
   -webkit-transform: translateY(-12px);
   -moz-transform:    translateY(-12px);
-  transform:         translateY(-12px); 
+  transform:         translateY(-12px);
 }
 
 /* Left */
@@ -326,7 +329,7 @@ header,
 .tooltip-left:focus:after {
   -webkit-transform: translateX(-12px);
   -moz-transform:    translateX(-12px);
-  transform:         translateX(-12px); 
+  transform:         translateX(-12px);
 }
 
 /* Bottom */
@@ -351,7 +354,7 @@ header,
 .tooltip-bottom:focus:after {
   -webkit-transform: translateY(12px);
   -moz-transform:    translateY(12px);
-  transform:         translateY(12px); 
+  transform:         translateY(12px);
 }
 
 /* Right */
@@ -375,7 +378,7 @@ header,
 .tooltip-right:focus:after {
   -webkit-transform: translateX(12px);
   -moz-transform:    translateX(12px);
-  transform:         translateX(12px); 
+  transform:         translateX(12px);
 }
 
 /* Move directional arrows down a bit for left/right tooltips */
