@@ -101,7 +101,7 @@
             ul += '</ul>';
 
             li.insertAdjacentHTML('beforeend', ul);
-            li.insertAdjacentHTML('afterbegin', '<svg width="400" height="400" viewBox="-200 -200 400 400"></svg>');
+            li.insertAdjacentHTML('afterbegin', '<svg width="300" height="300" viewBox="-150 -150 300 300"></svg>');
 
             var svg = li.querySelector('svg');
 
@@ -186,7 +186,7 @@
             ul += '</ul>';
 
             li.insertAdjacentHTML('beforeend', ul);
-            li.insertAdjacentHTML('afterbegin', '<svg width="400" height="400" viewBox="-200 -200 400 400"></svg>');
+            li.insertAdjacentHTML('afterbegin', '<svg width="300" height="300" viewBox="-150 -150 300 300"></svg>');
 
             var svg = li.querySelector('svg');
 
