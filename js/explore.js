@@ -130,7 +130,7 @@
                         r: dotR,
                         style: 'transform: translate(' + x + 'px, ' + y + 'px)'
                     });
-                    circle.dataset.tooltip = answer[2];
+                   // circle.dataset.tooltip = answer[2];
                     circle.endX = endX;
                     circle.endY = endY;
 
@@ -207,7 +207,7 @@
                         r: dotR,
                         style: 'transform: translate(' + x + 'px, ' + y + 'px)'
                     });
-                    circle.dataset.tooltip = answer[2];
+                 //   circle.dataset.tooltip = answer[2];
 
                     svg.appendChild(circle);
 
