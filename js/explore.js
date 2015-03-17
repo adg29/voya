@@ -94,7 +94,7 @@
                     return l==a[2];
                 });
                 if(r.length>0){
-                    var percent = (r[0][0] / choiceTotal * 100).toFixed(1);
+                    var percent = r[0][1];
                     ul += '<li class="subgroup-item" data-tooltip="'+ percent +'% '+ r[0][2] +'" style="width: ' + percent + '%; background-color: ' + legend[r[0][2]].color + '">' + percent + '%</li>';
                 }
             });
