@@ -8,7 +8,7 @@
 	var $previous = byId('previous');
 	var $next = byId('next');
 	var qPosition = 0;
-	
+
     var legend = {
         "Frozen": {
             className: 'frozen',
@@ -48,7 +48,7 @@
         qList.insertAdjacentHTML('beforeend', '<li></li>');
     });
 
- 
+
 
     // select from one of 9 questions
     qList.addEventListener('click', function (e) {
@@ -56,11 +56,11 @@
         // console.log(e);
         var position = Array.prototype.indexOf.call(qList.childNodes, e.target);
          console.log(position);
-		 
+
 		 drawIdv(position);
 	});
-	
-	
+
+
 	$previous.addEventListener('click', function (e) {
 		if(qPosition == 0){
 			 drawIdv(8);
@@ -75,7 +75,7 @@
 		drawIdv(qPosition+1);
 		}
 	});
-	
+
 	var drawIdv = function(position) {
 
 		qPosition = position;
@@ -146,31 +146,32 @@
                 for (var j = 0; j < answer[0]; j++, n++) {
                     var theta = 2.39998131 * n;
                     var radius = 2.5 * Math.sqrt(theta);
-                    var startRad = 5 * Math.sqrt(theta);
-                    var x = Math.cos(theta) * startRad;
-                    var y = Math.sin(theta) * startRad;
-                    var endX = Math.cos(theta) * radius;
-                    var endY = Math.sin(theta) * radius;
+                    var x = Math.cos(theta) * radius;
+                    var y = Math.sin(theta) * radius;
+                    var fill = legend[answer[2]].color;
 
                     var circle = document.createElementNS(ns, 'circle');
                     setAttrs(circle, {
-                        fill: legend[answer[2]].color,
                         r: dotR,
-                        style: 'transform: translate(' + x + 'px, ' + y + 'px)'
+                        cx: x,
+                        cy: y,
+                        fill: 'rgba(0, 0, 0, 0)'
                     });
                    // circle.dataset.tooltip = answer[2];
-                    circle.endX = endX;
-                    circle.endY = endY;
+
+                   setTimeout(function (circle, fill) {
+                       circle.setAttribute('fill', fill);
+                   }.bind(this, circle, fill), n * 5 + 250);
 
                     svg.appendChild(circle);
                 }
             });
 
-            setTimeout(function () {
-                svg.getElementsByTagName('circle').forEach(function (circle) {
-                    circle.setAttribute('style', 'transform: translate(' + circle.endX + 'px, ' + circle.endY + 'px)');
-                });
-            }, 0);
+            // setTimeout(function () {
+            //     svg.getElementsByTagName('circle').forEach(function (circle) {
+            //         circle.setAttribute('fill-opacity', 1);
+            //     });
+            // }, 0);
 
             retireesQ.appendChild(li);
         });
@@ -233,7 +234,8 @@
                         // fill: legend[answer[2]].color,
                         fill: 'rgba(0, 0, 0, 0)',
                         r: dotR,
-                        style: 'transform: translate(' + x + 'px, ' + y + 'px)'
+                        cx: x,
+                        cy: y
                     });
                  //   circle.dataset.tooltip = answer[2];
 
@@ -241,7 +243,7 @@
 
                     setTimeout(function (fill, circle) {
                         circle.setAttribute('fill', fill);
-                    }, n * 5, fill, circle);
+                    }.bind(this, fill, circle), n * 5);
                 }
             });
 
