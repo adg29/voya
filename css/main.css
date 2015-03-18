@@ -12,13 +12,16 @@ a:hover{
 	text-decoration:underline;
 }
 
-
+#wrapper{
+	position:relative;
+}
 .content{
     background: #F5F5F5;
     width: 90%;
     margin: auto;
     display: block;
 	margin: 10px auto;
+	
 }
 
 div, p, article, li, ul, h1, h2, h3, h4, h5, h6, table {
@@ -429,4 +432,18 @@ header,
 .tooltip-right:after {
   margin-left: 0;
   margin-bottom: -16px;
+}
+.nav{
+	cursor:pointer;
+	position:absolute;
+	top:50%;
+	color:#fa7b2c;
+	font-size:3em;
+	font-family:Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif
+}
+#previous{
+	left:10px;
+}
+#next{
+	right:10px;
 }

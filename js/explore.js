@@ -5,7 +5,10 @@
     var retireeChart = $('.retirees .chart');
     var currentAnswers = $('.current-answers section');
     var currentAnswerItems = $all('.current-answers section .answer-item a');
-
+	var $previous = byId('previous');
+	var $next = byId('next');
+	var qPosition = 0;
+	
     var legend = {
         "Frozen": {
             className: 'frozen',
@@ -45,12 +48,37 @@
         qList.insertAdjacentHTML('beforeend', '<li></li>');
     });
 
+ 
+
     // select from one of 9 questions
     qList.addEventListener('click', function (e) {
         if (e.target.tagName !== 'LI') return;
         // console.log(e);
         var position = Array.prototype.indexOf.call(qList.childNodes, e.target);
-        // console.log(position);
+         console.log(position);
+		 
+		 drawIdv(position);
+	});
+	
+	
+	$previous.addEventListener('click', function (e) {
+		if(qPosition == 0){
+			 drawIdv(8);
+		}  else{
+		drawIdv(qPosition-1);
+		}
+	});
+	$next.addEventListener('click', function (e) {
+		 if(qPosition == 8){
+			 drawIdv(0);
+		}  else{
+		drawIdv(qPosition+1);
+		}
+	});
+	
+	var drawIdv = function(position) {
+
+		qPosition = position;
 
         $('#questions .active').classList.remove('active');
         qList.childNodes[position].classList.add('active');
@@ -223,7 +251,7 @@
         currentAnswerItems = $all('.current-answers section .answer-item a');
         currentAnswerItems[0].click();
 
-    });
+    };
 
     // select from subgroups
     // qualifiers.addEventListener('mouseover', function (e) {
