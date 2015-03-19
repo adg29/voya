@@ -8,34 +8,78 @@
 	var $previous = byId('previous');
 	var $next = byId('next');
 	var qPosition = 0;
+	var statkey = 1;
+	
+	
+
 
     var legend = {
         "Frozen": {
             className: 'frozen',
-            color: '#6E6E6E',
-            desc: 'Describe frozen ....'
+            color: '#0097A9',
+            desc: "You may know a lot about retirement preparation, but don't yet have the resources to retire, so do little to plan for it."
         },
         "Behind": {
             className: 'blind',
-            color: '#B7357C',
-            desc: 'Describe behind ....'
+            color: '#B73F7C',
+            desc: "You're not yet financially prepared for retirement, nor do you yet have the tools to help plan and budget for your retirement."
         },
         "Aware": {
             className: 'challenged',
-            color: '#FFC700',
-            desc: 'Describe aware ....'
+            color: '#76C5E4',
+            desc: "You're knowledgeable about the planning and budgeting you'll need in retirement, but you likely haven't yet secured your finances."
         },
         "Stable": {
             className: 'auto-pilot',
-            color: '#76C5E4',
-            desc: 'Describe stable ....'
+            color: '#FFC700',
+            desc: "You may be financially secure because of your pension, but there's more you could learn about planning and budgeting for your retirement."
         },
         "Prepared": {
             className: 'ready',
-            color: '#9AC1A6',
-            desc: 'Describe prepared ....'
+            color: '#D75426',
+            desc: "You are confident about your retirement because you have prepared financially and mentally for the journey ahead."
         }
     };
+	
+	
+	var urlParams;
+	(window.onpopstate = function () {
+		var match,
+			pl     = /\+/g,  // Regex for replacing addition symbol with a space
+			search = /([^&=]+)=?([^&]*)/g,
+			decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+			query  = window.location.search.substring(1);
+	
+		urlParams = {};
+		while (match = search.exec(query))
+		   urlParams[decode(match[1])] = decode(match[2]);
+	})();
+	if(urlParams['prepared'] != undefined){
+		//	console.log("prepared",urlParams['prepared']);
+			legend.Prepared.color = "#"+urlParams['prepared'];
+	}
+	if(urlParams['stable'] != undefined){
+		//	console.log("prepared",urlParams['prepared']);
+			legend.Stable.color = "#"+urlParams['stable'];
+	}
+	if(urlParams['aware'] != undefined){
+		//	console.log("prepared",urlParams['prepared']);
+			legend.Aware.color = "#"+urlParams['aware'];
+	}
+	if(urlParams['behind'] != undefined){
+		//	console.log("prepared",urlParams['prepared']);
+			legend.Behind.color = "#"+urlParams['behind'];
+	}
+	if(urlParams['frozen'] != undefined){
+		//	console.log("prepared",urlParams['prepared']);
+			legend.Frozen.color = "#"+urlParams['frozen'];
+	}
+	if(urlParams['statkey'] != undefined){
+		//	console.log("prepared",urlParams['prepared']);
+			statkey = urlParams['statkey'];
+	}
+
+
 
     Object.keys(legend).forEach(function (key) {
         $legend.insertAdjacentHTML('afterbegin', '<li data-tooltip="'+legend[key].desc+'"><span class="dot" style="background: ' + legend[key].color + '"></span> <span class="key">' + key + '</span></li>');
@@ -55,7 +99,7 @@
         if (e.target.tagName !== 'LI') return;
         // console.log(e);
         var position = Array.prototype.indexOf.call(qList.childNodes, e.target);
-         console.log(position);
+      //   console.log("position",position);
 
 		 drawIdv(position);
 	});
@@ -102,9 +146,9 @@
 
         //Retired choices
         vData.questions[position].rchoices.forEach(function (choice,ci) {
-            console.log('retirees choice', choice);
-
-            ul_answer_items += '<li class="answer-item '+sanitizeClass(vData.questions[position].wq+'-'+ci)+'"><a data-choice="'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'" href="#'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'">'+choice.l+'</a></li>';
+          //  console.log('retirees choice',choice);
+			var worker_percentage =  vData.questions[position].wchoices[ci].p;
+            ul_answer_items += '<li class="answer-item '+sanitizeClass(vData.questions[position].wq+'-'+ci)+'"><a data-choice="'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'" href="#'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'">'+choice.l+'<BR> W'+worker_percentage+'% | R'+choice.p+'%</a></li>';
 
 
             currentAnswers.appendChild(ul_answers);
@@ -122,8 +166,9 @@
                     return l==a[2];
                 });
                 if(r.length>0){
-                    var percent = r[0][1];
-                    ul += '<li class="subgroup-item" data-tooltip="'+ percent +'% '+ r[0][2] +'" style="width: ' + percent + '%; background-color: ' + legend[r[0][2]].color + '">' + percent + '%</li>';
+                    var archetype_percent = r[0][1];
+					var percent = r[0][5];
+                    ul += '<li class="subgroup-item" data-tooltip="'+ archetype_percent +'% of'+ r[0][2] +' | '+ r[0][5] +'%" style="width: ' + archetype_percent + '%; background-color: ' + legend[r[0][2]].color + '">' + archetype_percent + '%</li>';
                 }
             });
             ul += '</ul>';
@@ -142,8 +187,9 @@
 
             var n = 0;
 
-            choice.a.forEach(function (answer) {
-                for (var j = 0; j < answer[0]; j++, n++) {
+            choice.a.reverse().forEach(function (answer) {
+				console.log('answer',answer);
+                for (var j = 0; j < answer[statkey]; j++, n++) {
                     var theta = 2.39998131 * n;
                     var radius = 2.5 * Math.sqrt(theta);
                     var x = Math.cos(theta) * radius;
@@ -155,7 +201,8 @@
                         r: dotR,
                         cx: x,
                         cy: y,
-                        fill: 'rgba(0, 0, 0, 0)'
+                        fill: 'rgba(0, 0, 0, 0)',
+						class: answer[2].toLowerCase()
                     });
                    // circle.dataset.tooltip = answer[2];
 
@@ -183,7 +230,7 @@
             a.addEventListener('click',function(e){
                 var answerAnchor = e.currentTarget;
                 var answerChoice = answerAnchor.dataset.choice;
-                console.log(answerChoice);
+             //   console.log(answerChoice);
 
                 $all('.qualifiers > li.active, .answer-item.active').forEach(function(c){
                     c.classList.remove('active');
@@ -192,6 +239,7 @@
                 $all('.'+answerChoice).forEach(function(c){
                     c.classList.add('active');
                 });
+				
             });
         });
 
@@ -201,15 +249,17 @@
             li.classList.add(sanitizeClass(vData.questions[position].wq+'-'+ci));
             // li.textContent = choice.l;
             var choiceTotal = choice.a.reduce(function(t,p,i){ return t + p[0]; },0);
-
+		//	console.log(choiceTotal);
             var ul = '<ul class="subgroup">';
             Object.keys(legend).reverse().forEach(function (l) {
                 var w = choice.a.filter(function(a){
                     return l==a[2];
                 });
                 if(w.length>0){
-                    var percent = w[0][1];
-                    ul += '<li class="subgroup-item" data-tooltip="'+ percent +'% '+ w[0][2] +'" style="width: ' + percent + '%; background-color: ' + legend[w[0][2]].color + '">' + percent + '%</li>';
+					 var archetype_percent = w[0][1];
+                    var percent = w[0][5];
+					
+                    ul += '<li class="subgroup-item" data-tooltip="'+ archetype_percent +'% '+ w[0][2] +'" style="width: ' + archetype_percent + '%; background-color: ' + legend[w[0][2]].color + '">' + archetype_percent + '%</li>';
                 }
             });
             ul += '</ul>';
@@ -222,7 +272,7 @@
             var n = 0;
 
             choice.a.reverse().forEach(function (answer) {
-                for (var j = 0; j < answer[0]; j++, n++) {
+                for (var j = 0; j < answer[statkey]; j++, n++) {
                     var theta = 2.39998131 * n;
                     var radius = 2.5 * Math.sqrt(theta);
                     var x = Math.cos(theta) * radius;
@@ -235,7 +285,9 @@
                         fill: 'rgba(0, 0, 0, 0)',
                         r: dotR,
                         cx: x,
-                        cy: y
+                        cy: y,
+						class: answer[2].toLowerCase()
+						
                     });
                  //   circle.dataset.tooltip = answer[2];
 
