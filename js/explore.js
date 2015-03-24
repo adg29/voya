@@ -145,7 +145,7 @@
         var ul_answer_items = "";
 
         //Retired choices
-        vData.questions[position].rchoices.forEach(function (choice,ci) {
+        vData.questions[position].wchoices.forEach(function (choice,ci) {
           //  console.log('retirees choice',choice);
 			var worker_percentage =  vData.questions[position].wchoices[ci].p;
             ul_answer_items += '<li class="answer-item '+sanitizeClass(vData.questions[position].wq+'-'+ci)+'"><a data-choice="'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'" href="#'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'">'+choice.l+'<BR> W'+worker_percentage+'% | R'+choice.p+'%</a></li>';
