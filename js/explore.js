@@ -154,7 +154,8 @@
             currentAnswers.appendChild(ul_answers);
 
             var li = document.createElement('li');
-            li.classList.add(sanitizeClass(vData.questions[position].wq+'-'+ci));
+            var qClass = sanitizeClass(vData.questions[position].wq+'-'+ci);
+            li.classList.add(qClass);
             // li.textContent = choice.l;
 
             var choiceTotal = choice.a.reduce(function(t,p,i){ return t + p[0];},0);
@@ -168,16 +169,15 @@
                 if(r.length>0){
                     var archetype_percent = r[0][1];
 					var percent = r[0][5];
-                    ul += '<li class="subgroup-item" data-tooltip="'+ archetype_percent +'% of'+ r[0][2] +' | '+ r[0][5] +'%" style="width: ' + archetype_percent + '%; background-color: ' + legend[r[0][2]].color + '">' + archetype_percent + '%</li>';
+                    // ul += '<li class="subgroup-item" data-tooltip="'+ archetype_percent +'% of'+ r[0][2] +' | '+ r[0][5] +'%" style="width: ' + archetype_percent + '%; background-color: ' + legend[r[0][2]].color + '">' + archetype_percent + '%</li>';
+                    ul += '<li class="subgroup-item '+ r[0][2] +'" data-tooltip="'+ archetype_percent +'% of'+ r[0][2] +' | '+ r[0][5] +'%" style="background-color: ' + legend[r[0][2]].color + '">' + archetype_percent + '%</li>';
                 }
             });
             ul += '</ul>';
 
             li.insertAdjacentHTML('beforeend', ul);
             li.insertAdjacentHTML('beforeend', '<div class="svg column"><svg viewBox="-150 -150 300 300"></svg></div>');
-            li.insertAdjacentHTML('beforeend', '<div class="stat respondents">'+choice.p+'% of surveyed retirees responded</div>');
-
-
+            li.insertAdjacentHTML('beforeend', '<div class="stat respondents">'+choice.p+'% of surveyed retirees responded</div>');            
 
             var svg = li.querySelector('svg');
 
@@ -211,6 +211,24 @@
 
                    setTimeout(function (circle, fill) {
                        circle.setAttribute('fill', fill);
+
+                        Object.keys(legend).reverse().forEach(function (l, i) {
+
+                            var r = choice.a.filter(function(a){
+                                return l==a[2];
+                            });
+                            if(r.length>0){
+                                var archetype_percent = r[0][1];
+                                var percent = r[0][5];
+                                var archetype_label = r[0][2];
+                                // ul += '<li class="subgroup-item" data-tooltip="'+ archetype_percent +'% of'+ r[0][2] +' | '+ r[0][5] +'%" style="width: ' + archetype_percent + '%; background-color: ' + legend[r[0][2]].color + '">' + archetype_percent + '%</li>';
+
+                                var archetype_bar = li.querySelector('.'+qClass+' .'+archetype_label);
+                                console.log(archetype_bar);
+                                archetype_bar.style.width = archetype_percent + '%';
+                            }
+                        });
+
                    }.bind(this, circle, fill), n * 5 + 250);
 
                     svg.appendChild(circle);
@@ -224,6 +242,7 @@
             // }, 0);
 
             retireesQ.appendChild(li);
+
         });
 
         ul_answers.insertAdjacentHTML('beforeend',ul_answer_items);
@@ -249,7 +268,8 @@
         //Worker choices
         vData.questions[position].wchoices.forEach(function (choice,ci) {
             var li = document.createElement('li');
-            li.classList.add(sanitizeClass(vData.questions[position].wq+'-'+ci));
+            var qClass = sanitizeClass(vData.questions[position].wq+'-'+ci);
+            li.classList.add(qClass);
             // li.textContent = choice.l;
             var choiceTotal = choice.a.reduce(function(t,p,i){ return t + p[0]; },0);
 		//	console.log(choiceTotal);
@@ -262,7 +282,7 @@
 					 var archetype_percent = w[0][1];
                     var percent = w[0][5];
 					
-                    ul += '<li class="subgroup-item" data-tooltip="'+ archetype_percent +'% '+ w[0][2] +'" style="width: ' + archetype_percent + '%; background-color: ' + legend[w[0][2]].color + '">' + archetype_percent + '%</li>';
+                    ul += '<li class="subgroup-item '+ w[0][2] +'" data-tooltip="'+ archetype_percent +'% '+ w[0][2] +'" style="background-color: ' + legend[w[0][2]].color + '">' + archetype_percent + '%</li>';
                 }
             });
             ul += '</ul>';
@@ -301,6 +321,23 @@
 
                     setTimeout(function (fill, circle) {
                         circle.setAttribute('fill', fill);
+                        Object.keys(legend).reverse().forEach(function (l, i) {
+
+                            var r = choice.a.filter(function(a){
+                                return l==a[2];
+                            });
+                            if(r.length>0){
+                                var archetype_percent = r[0][1];
+                                var percent = r[0][5];
+                                var archetype_label = r[0][2];
+                                // ul += '<li class="subgroup-item" data-tooltip="'+ archetype_percent +'% of'+ r[0][2] +' | '+ r[0][5] +'%" style="width: ' + archetype_percent + '%; background-color: ' + legend[r[0][2]].color + '">' + archetype_percent + '%</li>';
+
+                                var archetype_bar = li.querySelector('.'+qClass+' .'+archetype_label);
+                                console.log(archetype_bar);
+                                archetype_bar.style.width = archetype_percent + '%';
+                            }
+                        });
+
                     }.bind(this, fill, circle), n * 5);
                 }
             });

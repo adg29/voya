@@ -135,18 +135,22 @@ font-weight: 300;
 }
 
 .subgroup-item {
-    display: block;
-	margin-bottom: 6px;
-	height: 20px;
-	padding-top: 7px;
-	color: white;
+  display: block;
 	padding-left: 10px;
-	display: block;
   margin-bottom: 35px;
   margin-top: 5px;
   height: 25px;
   padding-top: 7px;
   color: white;
+
+  width: 0%;
+
+  -webkit-transition: width 1s ease-in-out;
+  -moz-transition: width 1s ease-in-out;
+  -o-transition: width 1s ease-in-out;
+  transition: width 1s ease-in-out;
+
+
 }
 
 .content .column{
