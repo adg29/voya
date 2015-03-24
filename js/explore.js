@@ -146,9 +146,9 @@
 
         //Retired choices
         vData.questions[position].wchoices.forEach(function (choice,ci) {
+            choice = vData.questions[position].rchoices[ci];
           //  console.log('retirees choice',choice);
-			var worker_percentage =  vData.questions[position].wchoices[ci].p;
-            ul_answer_items += '<li class="answer-item '+sanitizeClass(vData.questions[position].wq+'-'+ci)+'"><a data-choice="'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'" href="#'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'">'+choice.l+'<BR> W'+worker_percentage+'% | R'+choice.p+'%</a></li>';
+            ul_answer_items += '<li style="width:'+100/vData.questions[position].wchoices.length+'%;" class="answer-item '+sanitizeClass(vData.questions[position].wq+'-'+ci)+'"><a data-choice="'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'" href="#'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'">'+choice.l+'</a></li>';
 
 
             currentAnswers.appendChild(ul_answers);
@@ -159,7 +159,7 @@
 
             var choiceTotal = choice.a.reduce(function(t,p,i){ return t + p[0];},0);
 
-            var ul = '<ul class="subgroup">';
+            var ul = '<ul class="subgroup column">';
             Object.keys(legend).reverse().forEach(function (l, i) {
 
                 var r = choice.a.filter(function(a){
@@ -174,7 +174,10 @@
             ul += '</ul>';
 
             li.insertAdjacentHTML('beforeend', ul);
-            li.insertAdjacentHTML('afterbegin', '<svg width="300" height="300" viewBox="-150 -150 300 300"></svg>');
+            li.insertAdjacentHTML('beforeend', '<div class="svg column"><svg viewBox="-150 -150 300 300"></svg></div>');
+            li.insertAdjacentHTML('beforeend', '<div class="stat respondents">'+choice.p+'% of surveyed retirees responded</div>');
+
+
 
             var svg = li.querySelector('svg');
 
@@ -250,7 +253,7 @@
             // li.textContent = choice.l;
             var choiceTotal = choice.a.reduce(function(t,p,i){ return t + p[0]; },0);
 		//	console.log(choiceTotal);
-            var ul = '<ul class="subgroup">';
+            var ul = '<ul class="subgroup column rtl">';
             Object.keys(legend).reverse().forEach(function (l) {
                 var w = choice.a.filter(function(a){
                     return l==a[2];
@@ -265,7 +268,10 @@
             ul += '</ul>';
 
             li.insertAdjacentHTML('beforeend', ul);
-            li.insertAdjacentHTML('afterbegin', '<svg width="300" height="300" viewBox="-150 -150 300 300"></svg>');
+            li.insertAdjacentHTML('afterbegin', '<div class="svg column"><svg viewBox="-150 -150 300 300"></svg></div>');
+
+            var worker_percentage =  vData.questions[position].wchoices[ci].p;
+            li.insertAdjacentHTML('beforeend', '<div class="stat respondents">'+worker_percentage+'% of surveyed workers responded</div>');
 
             var svg = li.querySelector('svg');
 
