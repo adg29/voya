@@ -38,6 +38,12 @@ h3 {
   margin-top: 0px;
 }
 
+.current-cta{
+  font-variant: small-caps;
+  text-align: left;
+  margin-left: 1em;
+}
+
 .current-question {
    text-align: left;
 box-sizing: border-box;
@@ -126,22 +132,54 @@ font-weight: 300;
   left: 0px;
 }
 
+.archetype-charts{
+  padding: 1em 0;
+}
+
 .subgroup {
     margin: 0;
     padding: 0;
 }
+
+.subgroup-container,.subgroup-label{
+  display: inline-block;
+  width: 31%;
+}
+.subgroup-label{
+  position: relative;
+  top: .5em;
+}
+
+.subgroup-container.rtl,
 .subgroup.column.rtl {
   direction: rtl;
 }
 
+.subgroup-item span,
+.subgroup.column li span{
+  font-weight: bold;
+  color: black;
+  display: block;
+  position: relative;
+  top: 2em;
+  text-align: left;
+  padding-top: .5em;
+}
+.subgroup-container.rtl
+.subgroup-item span{
+  text-align: right;
+}
+
 .subgroup-item {
   display: block;
-	padding-left: 10px;
-  margin-bottom: 35px;
-  margin-top: 5px;
+  margin-bottom: 1em;
+  height: 2em;
+/*  margin-bottom: 35px;
   height: 25px;
+  margin-top: 5px;
+*//*  padding-left: 10px;
   padding-top: 7px;
-  color: white;
+*/  color: white;
 
   width: 0%;
 
@@ -179,16 +217,20 @@ font-weight: 300;
 .answers .answer-item{
     list-style-type: none;
     padding: 10px;
-    background: #fff;
+    background: #959090;
     margin-top: 5px;
     display: inline-block;
-    vertical-align: top;
-    height: 4em;
+    vertical-align  : top;
+    height: 5em;
+    text-align: left;
+    color: #fff;
+    margin-right: 1em;
 }
 .answers .active.answer-item{
     list-style-type: none;
     padding: 10px;
-    background: #ccc;
+    background: #c0bebe;
+    color: #000;
     margin-top: 5px;
 }
 .answer-item a{
@@ -197,18 +239,19 @@ font-weight: 300;
 .charts .column {
     padding: 0px 20px;
     display: inline-block;
-    width: 49.5%;
+    width: 100%;
     background: rgba(255, 255, 255, .1);
 }
 .charts .column.column-edge{
-    width: 45%;
+    width: 25%;
 }
 .charts .column.column-center{
-    width: 8%;
+    width: 49%;
 }
 
 #legend {
     padding: 0;
+    margin: 0px;
 }
 
 #legend .dot{
@@ -224,11 +267,18 @@ font-weight: 300;
 
 #legend li {
     list-style: none;
-    padding: 5px;
     color: black;
-    width: 90%;
+    width: 100%;
     margin: auto;
+    font-variant: small-caps;
+    font-weight: bold;
 }
+#legend li hr{
+ /*transform: translate(-44%, 50%);*/
+ margin: 0em auto;
+ width: 30em;
+}
+
 .key {
 	vertical-align:super;
 }

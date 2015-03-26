@@ -10,19 +10,24 @@
       
     <h2 class="current-question"></h2>
     <div class="current-answers">
-           <h3 class="current-cta">
-            Call to Action Copy
-        </h3> <section>
+        <h3 class="current-cta">
+            Explore common responses
+        </h3> 
+        <section>
         </section>
       
       
     </div>
     <div class="charts">
         <div class="workers column column-edge">
-            <h2>Worker</h2>
+            <h2>Working</h2>
             <ul class="qualifiers"></ul>
         </div>
-        <ul class="column column-center" id="legend"></ul>
+        <div class="column column-center" id="legend-container">
+            <h2>Archetype</h2>
+            <ul id="legend">
+            </ul>
+        </div>
         <div class="retirees column column-edge">
             <h2>Retired</h2>
             <ul class="qualifiers"></ul>
@@ -36,7 +41,22 @@
 </article>
  <span id="previous" class="nav">&lt;</span><span id="next" class="nav">&gt;</span>
 </div>
-
+<script id="tpl-legend-item" type="text/template">
+    <li>
+        <div class="archetype-charts">
+            <div class="subgroup-container rtl working">
+                <div class="subgroup-item <%= label %>" style="width: <%= percentw %>; background-color: <%= color %>;"><span><%= percentw %></span></div> 
+            </div>
+           <div class="subgroup-label" data-tooltip="<%= desc %>"><%= label %></div>
+            <div class="subgroup-container retired">
+                <div class="subgroup-item <%= label %>" style="width: <%= percentr %>; background-color: <%= color %>;"><span><%= percentr %></span></div>
+            </div>
+        </div>
+        <hr/>
+    </li>
+</script>
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.2/underscore.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/data-refresh.js"></script>
 <script src="js/explore.js"></script>

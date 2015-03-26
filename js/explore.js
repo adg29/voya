@@ -1,6 +1,7 @@
 (function () {
     var qList = byId('questions');
     var $legend = byId('legend');
+    var $legendContainer = byId('legend-container');
     var workerChart = $('.workers .chart');
     var retireeChart = $('.retirees .chart');
     var currentAnswers = $('.current-answers section');
@@ -14,11 +15,6 @@
 
 
     var legend = {
-        "Frozen": {
-            className: 'frozen',
-            color: '#0097A9',
-            desc: "You may know a lot about retirement preparation, but don't yet have the resources to retire, so do little to plan for it."
-        },
         "Behind": {
             className: 'blind',
             color: '#B73F7C',
@@ -81,8 +77,12 @@
 
 
 
+    var templateLegendItem = _.template( byId('tpl-legend-item').innerHTML );
     Object.keys(legend).forEach(function (key) {
-        $legend.insertAdjacentHTML('afterbegin', '<li data-tooltip="'+legend[key].desc+'"><span class="dot" style="background: ' + legend[key].color + '"></span> <span class="key">' + key + '</span></li>');
+        // $legend.insertAdjacentHTML('afterbegin', '<li data-tooltip="'+legend[key].desc+'"><span class="dot" style="background: ' + legend[key].color + '"></span> <span class="key">' + key + '</span></li>');
+        // $legend.insertAdjacentHTML('afterbegin', '<li data-tooltip="'+legend[key].desc+'"><span class="key">' + key + '</span><hr/></li>');
+        // $legend.insertAdjacentHTML('afterbegin', '<li data-tooltip="'+legend[key].desc+'"><span class="key">' + key + '</span></li>');
+        $legend.insertAdjacentHTML('afterbegin',  templateLegendItem( {color: legend[key].color, percentw: 0, percentr: 0, desc: legend[key].desc, label: key} ) );
     });
 
     var dotR = 3;
@@ -148,7 +148,7 @@
         vData.questions[position].wchoices.forEach(function (choice,ci) {
             choice = vData.questions[position].rchoices[ci];
           //  console.log('retirees choice',choice);
-            ul_answer_items += '<li style="width:'+100/vData.questions[position].wchoices.length+'%;" class="answer-item '+sanitizeClass(vData.questions[position].wq+'-'+ci)+'"><a data-choice="'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'" href="#'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'">'+choice.l+'</a></li>';
+            ul_answer_items += '<li style="width:'+90/vData.questions[position].wchoices.length+'%;" class="answer-item '+sanitizeClass(vData.questions[position].wq+'-'+ci)+'"><a data-choice="'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'" href="#'+sanitizeClass(vData.questions[position].wq+'-'+ci)+'">'+choice.l+'</a></li>';
 
 
             currentAnswers.appendChild(ul_answers);
@@ -170,7 +170,8 @@
                     var archetype_percent = r[0][1];
 					var percent = r[0][5];
                     // ul += '<li class="subgroup-item" data-tooltip="'+ archetype_percent +'% of'+ r[0][2] +' | '+ r[0][5] +'%" style="width: ' + archetype_percent + '%; background-color: ' + legend[r[0][2]].color + '">' + archetype_percent + '%</li>';
-                    ul += '<li class="subgroup-item '+ r[0][2] +'" data-tooltip="'+ archetype_percent +'% of'+ r[0][2] +' | '+ r[0][5] +'%" style="background-color: ' + legend[r[0][2]].color + '">' + archetype_percent + '%</li>';
+                    // ul += '<li class="subgroup-item '+ r[0][2] +'" data-tooltip="'+ archetype_percent +'% of'+ r[0][2] +' | '+ r[0][5] +'%" style="background-color: ' + legend[r[0][2]].color + '">' + archetype_percent + '%</li>';
+                    // ul += '<li class="subgroup-item '+ r[0][2] +'" style="background-color: ' + legend[r[0][2]].color + '"><span>' + archetype_percent + '%</span></li>';
                 }
             });
             ul += '</ul>';
@@ -252,7 +253,44 @@
             a.addEventListener('click',function(e){
                 var answerAnchor = e.currentTarget;
                 var answerChoice = answerAnchor.dataset.choice;
-             //   console.log(answerChoice);
+                var qa = answerAnchor.dataset.choice.split('-');
+                console.log(answerChoice);
+
+                var q = qa[0].toUpperCase();
+                var a = qa[1];
+
+                var qData = _.find(vData.questions,function(vq){
+                    return vq.wq ==  q;
+                });
+
+                var aWData = qData.wchoices[a];
+
+                _.each(aWData.a,function(archetypeData) {
+                    var archetypePercent = archetypeData[1];
+                    var archetypeLabel = archetypeData[2];
+
+                    var barWorking = $('.subgroup-container.working .subgroup-item.'+archetypeLabel);
+                    var labelWorking = $('.subgroup-container.working .subgroup-item.'+archetypeLabel+' span');
+
+                    barWorking.style.width = archetypePercent + '%';
+                    labelWorking.innerHTML =  archetypePercent + '%';
+
+                });
+
+                var aRData = qData.rchoices[a];
+
+                _.each(aRData.a,function(archetypeData) {
+                    var archetypePercent = archetypeData[1];
+                    var archetypeLabel = archetypeData[2];
+
+                    var barRetired = $('.subgroup-container.retired .subgroup-item.'+archetypeLabel);
+                    var labelRetired = $('.subgroup-container.retired .subgroup-item.'+archetypeLabel+' span');
+
+                    barRetired.style.width = archetypePercent + '%';
+                    labelRetired.innerHTML =  archetypePercent + '%';
+                });
+
+
 
                 $all('.qualifiers > li.active, .answer-item.active').forEach(function(c){
                     c.classList.remove('active');
@@ -282,7 +320,8 @@
 					 var archetype_percent = w[0][1];
                     var percent = w[0][5];
 					
-                    ul += '<li class="subgroup-item '+ w[0][2] +'" data-tooltip="'+ archetype_percent +'% '+ w[0][2] +'" style="background-color: ' + legend[w[0][2]].color + '">' + archetype_percent + '%</li>';
+                    // ul += '<li class="subgroup-item '+ w[0][2] +'" data-tooltip="'+ archetype_percent +'% '+ w[0][2] +'" style="background-color: ' + legend[w[0][2]].color + '">' + archetype_percent + '%</li>';
+                    // ul += '<li class="subgroup-item '+ w[0][2] +'" style="background-color: ' + legend[w[0][2]].color + '"><span>' + archetype_percent + '%</span></li>';
                 }
             });
             ul += '</ul>';
